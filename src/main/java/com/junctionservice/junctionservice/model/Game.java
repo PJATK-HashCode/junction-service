@@ -3,17 +3,15 @@ package com.junctionservice.junctionservice.model;
 import lombok.Data;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @Data
 public final class Game {
-    private final static Map<Long,Match> set = new HashMap<>();
+    private final static Map<Long,Competition> set = new HashMap<>();
     private static Game game = null;
 
     protected Game() {
-        set.put(1L, new Match());
+        set.put(1L, new Competition());
     }
 
     public static Game getGame() {

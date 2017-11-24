@@ -11,5 +11,4 @@ public class GameController {
         Game.getGame();
     }
 
-
 }

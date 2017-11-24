@@ -6,12 +6,13 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class Match {
+public class Competition {
     private String gameCode;
     private Player admin;
     private BigDecimal totalBill;
     private StateOfGame stateOfGame;
     private boolean fixedShare;
     private List<Player> players;
+
 
 }
