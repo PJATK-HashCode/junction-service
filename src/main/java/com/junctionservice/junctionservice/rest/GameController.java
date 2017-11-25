@@ -40,4 +40,11 @@ public class GameController {
 
         return new ResponseEntity<>(matchResponse, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/{competitionId}/selectMinigame", method = RequestMethod.GET)
+    public ResponseEntity<MatchResponse> startMinigame(@PathVariable("competitionId") Long competitionId,
+                                                       @RequestParam("playerId") Long playerId) throws InterruptedException {
+        MatchResponse matchResponse = gameService.startMinigames(competitionId,playerId);
+        return new ResponseEntity<MatchResponse>(matchResponse,HttpStatus.OK);
+    }
 }
