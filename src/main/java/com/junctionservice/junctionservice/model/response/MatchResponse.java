@@ -2,6 +2,7 @@ package com.junctionservice.junctionservice.model.response;
 
 
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.service.minichallenge.IMiniChallengeService;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -19,4 +20,5 @@ public class MatchResponse {
     private String question;
     private Boolean isNextRound;
     private List<String> possibleAnswers;
+    private IMiniChallengeService iMiniChallengeService;
 }

@@ -1,10 +1,11 @@
 package com.junctionservice.junctionservice.service.minichallenge;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IMiniChallengeService {
 
-    int challengeId();
+    Integer challengeId();
 
     String challengeName();
 
@@ -13,4 +14,6 @@ public interface IMiniChallengeService {
     String question();
 
     List<String> possibleAnswers();
+
+    Map<String,String> multipleParameterQuestion();
 }
