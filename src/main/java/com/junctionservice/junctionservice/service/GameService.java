@@ -6,6 +6,8 @@ import com.junctionservice.junctionservice.model.Player;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class GameService {
 
@@ -28,16 +30,36 @@ public class GameService {
     }
 
 
-    public MatchResponse joinCompetition(long competitionId, long avatarId, String name){
+    public MatchResponse joinCompetition(long competitionId, long avatarId, String name, BigDecimal initialAmount) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
         Competition competition = Game.competition.get(competitionId);
 
-        for (int i = 1; i < competition.getNumberOfPlayers()
-                ; i++) {
-            Player player = new Player();
+        Long numberOfPlayers = new Long(competition.getNumberOfPlayers());
 
+        for (int i = 1; i < numberOfPlayers
+                ; i++) {
+            if (competition.getPlayers().get((long)i) == null)
+            {
+                Player player = new Player();
+                player.setAvatarId(avatarId);
+                player.setId(i);
+                player.setName(name);
+                player.setInitialBillAmount(initialAmount);
+
+
+
+                competition.getPlayers().put((long) i,player);
+                break;
+            }
         }
 
+        while(competition.getPlayers().get(numberOfPlayers) != null){
+            Thread.sleep(10);
+        }
+
+        matchResponse.setCompetitionId(competitionId);
+        matchResponse.getResponsePlayers().addAll(competition.getPlayers().values());
+        matchResponse.setRunGame(true);
         return matchResponse;
     }
 
