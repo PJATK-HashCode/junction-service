@@ -14,6 +14,6 @@ public class MatchResponse {
     private List<Player> responsePlayers = new ArrayList<>();
     private Boolean isFinished;
     private Boolean runGame;
-    private String currentPlayerId;
-
+    private Player currentPlayerId;
+    private String gameName;
 }

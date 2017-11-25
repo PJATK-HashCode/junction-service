@@ -7,6 +7,9 @@ import com.junctionservice.junctionservice.model.response.MatchResponse;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class GameService {
@@ -26,17 +29,17 @@ public class GameService {
         game.competition.put(competitionId,competition);
         competitionId++;
         matchResponse.setCompetitionId(competitionId);
-        matchResponse.setCurrentPlayerId(competition.getAdmin().getId().toString());
+        matchResponse.setCurrentPlayerId(competition.getAdmin());
         return matchResponse;
     }
 
 
-    public MatchResponse joinCompetition(long competitionId, long avatarId, String name, BigDecimal initialAmount) throws InterruptedException {
+    public MatchResponse joinCompetition(long currentId, long avatarId, String name, BigDecimal initialAmount) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
-        Long numberOfPlayers = (long) Game.competition.get(competitionId).getNumberOfPlayers();
+        Long numberOfPlayers = (long) Game.competition.get(currentId).getNumberOfPlayers();
 
         for (int i = 1; i < numberOfPlayers; i++) {
-            if (Game.competition.get(competitionId).getPlayers().get((long)i) == null)
+            if (Game.competition.get(currentId).getPlayers().get((long)i) == null)
             {
                 Player player = new Player();
                 player.setAvatarId(avatarId);
@@ -44,17 +47,41 @@ public class GameService {
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
 
-                matchResponse.setCurrentPlayerId(String.valueOf(i));
-                Game.competition.get(competitionId).getPlayers().put((long) i,player);
+                matchResponse.setCurrentPlayerId(player);
+                Game.competition.get(currentId).getPlayers().put((long) i,player);
                 break;
             }
         }
-        while(Game.competition.get(competitionId).getPlayers().size() != numberOfPlayers){
-            Thread.sleep(10);
+        while(Game.competition.get(currentId).getPlayers().size() != numberOfPlayers){
+            Thread.sleep(30);
         }
-        matchResponse.setCompetitionId(competitionId);
-        matchResponse.getResponsePlayers().addAll(Game.competition.get(competitionId).getPlayers().values());
+        matchResponse.setCompetitionId(currentId);
+        matchResponse.getResponsePlayers().addAll(Game.competition.get(currentId).getPlayers().values());
         matchResponse.setRunGame(true);
+        return matchResponse;
+    }
+
+    public MatchResponse startMinigames(long currentId, long playerId) throws InterruptedException {
+        MatchResponse matchResponse = new MatchResponse();
+        Player currentPlayer = Game.competition.get(currentId).getPlayers().get(playerId);
+
+        List<Player> listOfPlayers = new ArrayList<>();
+        listOfPlayers.addAll(Game.competition.get(currentId).getPlayers().values());
+        List<Player> listOfConfirmedPlayers = new ArrayList<>();
+
+        listOfConfirmedPlayers.add(currentPlayer);
+
+        while(listOfConfirmedPlayers.size() != listOfPlayers.size()){
+            Thread.sleep(30);
+        }
+        // SELECT GAME HERE
+
+
+        matchResponse.setCompetitionId(currentId);
+        matchResponse.getResponsePlayers().addAll(Game.competition.get(currentId).getPlayers().values());
+        matchResponse.setGameName("TUTAJ WYLOSUJEMY NAZWE GRY ELO");
+
+
         return matchResponse;
     }
 }
