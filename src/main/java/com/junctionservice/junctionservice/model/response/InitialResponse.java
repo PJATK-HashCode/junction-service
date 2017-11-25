@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class InitialResponse {
 
-    private boolean doExist;
-    private boolean doInputInitialBill;
+    private Boolean doExist;
+    private Boolean doInputInitialBill;
 }
