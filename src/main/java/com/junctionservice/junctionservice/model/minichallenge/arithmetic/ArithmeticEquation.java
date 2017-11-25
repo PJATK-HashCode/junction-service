@@ -15,11 +15,11 @@ public class ArithmeticEquation implements IMiniChallenge {
 
     @Override
     public int id() {
-        return 0;
+        return this.id;
     }
 
     @Override
     public String name() {
-        return null;
+        return this.name;
     }
 }

@@ -17,12 +17,12 @@ public class ArithmeticEquationService implements IMiniChallengeService {
 
     @Override
     public int challengeId() {
-        return arithmeticEquationGame.getId();
+        return arithmeticEquationGame.id();
     }
 
     @Override
     public String challengeName() {
-        return arithmeticEquationGame.getName();
+        return arithmeticEquationGame.name();
     }
 
     @Override
