@@ -16,7 +16,7 @@ public class GameController {
 
     GameService gameService;
 
-    public Game game;
+    private Game game;
 
     @Autowired
     public GameController(GameService gameService) {
