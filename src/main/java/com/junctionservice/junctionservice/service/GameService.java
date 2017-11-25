@@ -5,6 +5,7 @@ import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
 import com.junctionservice.junctionservice.model.minichallenge.IMiniChallenge;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
+import com.junctionservice.junctionservice.service.minichallenge.IMiniChallengeService;
 import com.junctionservice.junctionservice.service.minichallenge.MiniChallengeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,36 +41,27 @@ public class GameService {
 
     public MatchResponse joinCompetition(long currentId, long avatarId, String name, BigDecimal initialAmount) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
-        Long numberOfPlayers = (long) Game.competition.get(currentId).getNumberOfPlayers();
+        Long numberOfPlayers = (long) getGame(currentId).getNumberOfPlayers();
 
-        for (int i = 1; i < numberOfPlayers; i++) {
-            if (Game.competition.get(currentId).getPlayers().get((long) i) == null) {
-                Player player = new Player();
-                player.setAvatarId(avatarId);
-                player.setId((long) i);
-                player.setName(name);
-                player.setInitialBillAmount(initialAmount);
+        setAllPlayers(currentId, avatarId, name, initialAmount, matchResponse, numberOfPlayers);
 
-                matchResponse.setCurrentPlayerId(player);
-                Game.competition.get(currentId).getPlayers().put((long) i, player);
-                break;
-            }
-        }
-        while (Game.competition.get(currentId).getPlayers().size() != numberOfPlayers) {
+        while (getGame(currentId).getPlayers().size() != numberOfPlayers) {
             Thread.sleep(30);
         }
         matchResponse.setCompetitionId(currentId);
-        matchResponse.getResponsePlayers().addAll(Game.competition.get(currentId).getPlayers().values());
+        matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
         matchResponse.setRunGame(true);
         return matchResponse;
     }
 
+
+
     public MatchResponse startMinigames(long currentId, long playerId) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
-        Player currentPlayer = Game.competition.get(currentId).getPlayers().get(playerId);
+        Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
 
         List<Player> listOfPlayers = new ArrayList<>();
-        listOfPlayers.addAll(Game.competition.get(currentId).getPlayers().values());
+        listOfPlayers.addAll(getGame(currentId).getPlayers().values());
         List<Player> listOfConfirmedPlayers = new ArrayList<>();
 
         listOfConfirmedPlayers.add(currentPlayer);
@@ -78,14 +70,58 @@ public class GameService {
             Thread.sleep(30);
         }
 
+        IMiniChallengeService miniChallenge = miniChallengeService.selectRandomChallenge();
+
+
+        if (getGame(currentId).getNumberOfRounds() == null){
+            getGame(currentId).setNumberOfRounds(1);
+        }
 
         matchResponse.setCompetitionId(currentId);
-        matchResponse.getResponsePlayers().addAll(Game.competition.get(currentId).getPlayers().values());
-        matchResponse.setGameName("TUTAJ WYLOSUJEMY NAZWE GRY ELO");
+        matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
+        matchResponse.setCurrentPlayerId(currentPlayer);
+        matchResponse.setGameName(miniChallenge.challengeName());
 
+        if (getGame(currentId).getNumberOfRounds() >=  getGame(currentId).getCurrentRound()){
+            matchResponse.setIsNextRound(false);
+        }else {
+            matchResponse.setIsNextRound(true);
+        }
 
         return matchResponse;
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private Competition getGame(long currentId) {
+        return Game.competition.get(currentId);
+    }
+
+    private void setAllPlayers(long currentId, long avatarId, String name, BigDecimal initialAmount, MatchResponse matchResponse, Long numberOfPlayers) {
+        for (int i = 0; i < numberOfPlayers; i++) {
+            if (getGame(currentId).getPlayers().get((long) i) == null) {
+                Player player = new Player();
+                player.setAvatarId(avatarId);
+                player.setId((long) i);
+                player.setName(name);
+                player.setInitialBillAmount(initialAmount);
+                matchResponse.setCurrentPlayerId(player);
+
+                getGame(currentId).getPlayers().put((long) i, player);
+                break;
+            }
+        }
+    }
 }

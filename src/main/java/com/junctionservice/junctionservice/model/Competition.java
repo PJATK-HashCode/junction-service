@@ -17,4 +17,5 @@ public class Competition {
     private Integer numberOfPlayers;
     private Integer numberOfRounds;
     private Ratio ratio;
+    private Integer currentRound;
 }

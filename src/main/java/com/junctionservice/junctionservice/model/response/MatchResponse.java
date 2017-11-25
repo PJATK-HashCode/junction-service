@@ -17,6 +17,6 @@ public class MatchResponse {
     private Player currentPlayerId;
     private String gameName;
     private String question;
-    private String roundNumber;
+    private Boolean isNextRound;
     private List<String> possibleAnswers;
 }

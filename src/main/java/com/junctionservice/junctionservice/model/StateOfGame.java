@@ -7,5 +7,5 @@ import java.util.Map;
 
 @Data
 public class StateOfGame {
-    private long step;
+    private long round;
 }
