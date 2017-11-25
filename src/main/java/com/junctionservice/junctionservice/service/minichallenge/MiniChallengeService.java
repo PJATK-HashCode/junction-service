@@ -1,6 +1,5 @@
 package com.junctionservice.junctionservice.service.minichallenge;
 
-import com.junctionservice.junctionservice.model.minichallenge.IMiniChallenge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
