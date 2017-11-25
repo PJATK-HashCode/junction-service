@@ -3,14 +3,16 @@ package com.junctionservice.junctionservice.model.minichallenge.arithmetic;
 import com.junctionservice.junctionservice.model.minichallenge.IMiniChallenge;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ArithmeticEquation implements IMiniChallenge {
 
     private int id;
     private String name;
-    private long firstNumber;
-    private long secondNumber;
-    private long result;
+    private int firstNumber;
+    private int secondNumber;
+    private BigDecimal result;
     private MathOperator mathOperator;
 
     @Override
