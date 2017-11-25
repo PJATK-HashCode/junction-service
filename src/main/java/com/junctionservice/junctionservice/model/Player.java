@@ -12,4 +12,5 @@ public class Player {
     private Double percentShare;
     private String name;
     private Long avatarId;
+    private Long score = 0L;
 }

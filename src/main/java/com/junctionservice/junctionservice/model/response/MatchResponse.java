@@ -2,6 +2,7 @@ package com.junctionservice.junctionservice.model.response;
 
 
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.model.SolveEquatationState;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -14,6 +15,10 @@ public class MatchResponse {
     private List<Player> responsePlayers = new ArrayList<>();
     private Boolean isFinished;
     private Boolean runGame;
-    private String currentPlayerId;
-
+    private Player currentPlayerId;
+    private String gameName;
+    private String question;
+    private Boolean isNextRound;
+    private List<String> possibleAnswers;
+    private SolveEquatationState solveEquatationState = new SolveEquatationState();
 }

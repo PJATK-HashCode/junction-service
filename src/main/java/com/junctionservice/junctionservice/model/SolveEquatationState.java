@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class StateOfGame {
-    private long step;
+public class SolveEquatationState {
+    private String question;
+    private List<String> possibleAnswerList;
 }

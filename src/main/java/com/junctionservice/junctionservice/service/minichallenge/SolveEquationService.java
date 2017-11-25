@@ -10,23 +10,28 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
 @Service
 @Data
-public class ArithmeticEquationService implements IMiniChallengeService {
+public class SolveEquationService implements IMiniChallengeService {
 
     @Autowired
     private MathOperatorMapper mathOperatorMapper;
     private ArithmeticEquation arithmeticEquationGame;
+    private final int challengeId = 1;
+    private final String challengeName = "Solve Equation";
 
-    public ArithmeticEquationService() {
+    public SolveEquationService() {
         this.arithmeticEquationGame = new ArithmeticEquation();
+        this.arithmeticEquationGame.setId(challengeId);
+        this.arithmeticEquationGame.setName(challengeName);
     }
 
     @Override
-    public int challengeId() {
+    public Integer challengeId() {
         return arithmeticEquationGame.id();
     }
 
@@ -67,6 +72,11 @@ public class ArithmeticEquationService implements IMiniChallengeService {
         answers.add(arithmeticEquationGame.getResult().toString());
         Collections.shuffle(answers);
         return answers;
+    }
+
+    @Override
+    public Map<String, String> multipleParameterQuestion() {
+        return null;
     }
 
 
