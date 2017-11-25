@@ -24,13 +24,13 @@ public class GameService {
 
         game.competition.put(competitionId,competition);
         competitionId++;
+        matchResponse.setCompetitionId(competitionId);
         return matchResponse;
     }
 
 
     public MatchResponse joinCompetition(long competitionId, long avatarId, String name, BigDecimal initialAmount) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
-
         Long numberOfPlayers = (long) Game.competition.get(competitionId).getNumberOfPlayers();
 
         for (int i = 1; i < numberOfPlayers; i++) {
@@ -38,7 +38,7 @@ public class GameService {
             {
                 Player player = new Player();
                 player.setAvatarId(avatarId);
-                player.setId(i);
+                player.setId((long)i);
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
 
@@ -47,7 +47,7 @@ public class GameService {
                 break;
             }
         }
-        while(Game.competition.get(competitionId).getPlayers().size() == numberOfPlayers){
+        while(Game.competition.get(competitionId).getPlayers().size() != numberOfPlayers){
             Thread.sleep(10);
         }
 
@@ -56,6 +56,4 @@ public class GameService {
         matchResponse.setRunGame(true);
         return matchResponse;
     }
-
-
 }

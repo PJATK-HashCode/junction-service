@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
+@RequestMapping("/game")
 public class GameController {
 
     GameService gameService;
@@ -32,11 +33,11 @@ public class GameController {
 
     @RequestMapping(value = "/{competitionId}/join", method = RequestMethod.GET)
     public ResponseEntity<MatchResponse> joinCompetition(@PathVariable("competitionId") Long competitionId,
-                                                         @RequestParam("name") String name,
+                                                         @RequestParam("nickName") String name,
                                                          @RequestParam("avatarId") Long avatarId,
                                                          @RequestParam("initialAmount")BigDecimal initialAmount) throws InterruptedException {
         MatchResponse matchResponse = gameService.joinCompetition(competitionId,avatarId,name,initialAmount);
 
-        return new ResponseEntity<MatchResponse>(matchResponse, HttpStatus.OK);
+        return new ResponseEntity<>(matchResponse, HttpStatus.OK);
     }
 }
