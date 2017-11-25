@@ -3,9 +3,10 @@ package com.junctionservice.junctionservice.service;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.model.minichallenge.IMiniChallenge;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
-import com.junctionservice.junctionservice.service.minichallenge.IMiniChallengeService;
-import com.junctionservice.junctionservice.service.minichallenge.SolveEquationService;
+import com.junctionservice.junctionservice.service.minichallenge.MiniChallengeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,9 +15,13 @@ import java.util.*;
 @Service
 public class GameService {
 
+    private MiniChallengeService miniChallengeService;
+
     private static long competitionId = 0;
-    
-    public GameService() {
+
+    @Autowired
+    public GameService(MiniChallengeService miniChallengeService) {
+        this.miniChallengeService = miniChallengeService;
     }
 
     public MatchResponse startNewGame(Competition competition, Game game) {
@@ -72,7 +77,7 @@ public class GameService {
         while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
             Thread.sleep(30);
         }
-        // SELECT GAME HERE
+
 
         matchResponse.setCompetitionId(currentId);
         matchResponse.getResponsePlayers().addAll(Game.competition.get(currentId).getPlayers().values());
