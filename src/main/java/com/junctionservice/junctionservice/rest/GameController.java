@@ -50,7 +50,7 @@ public class GameController {
     }
 
     @RequestMapping(value = "/ask", method = RequestMethod.POST)
-    public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestParam("gameId") Long gameId) {
+    public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestBody Long gameId) {
         InitialResponse initialResponse = gameService.checkIfSameGameExistsAndDoInputInitialBill(gameId);
         return new ResponseEntity<InitialResponse>(initialResponse, HttpStatus.OK);
     }
