@@ -16,4 +16,7 @@ public class MatchResponse {
     private Boolean runGame;
     private Player currentPlayerId;
     private String gameName;
+    private String question;
+    private String roundNumber;
+    private List<String> possibleAnswers;
 }
