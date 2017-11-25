@@ -79,6 +79,7 @@ public class GameService {
 
         matchResponse.setCompetitionId(currentId);
         matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
+        matchResponse.setCurrentPlayerId(currentPlayer);
         matchResponse.setGameName(miniChallenge.challengeName());
 
         if (getGame(currentId).getNumberOfRounds() >=  getGame(currentId).getCurrentRound()){
@@ -109,7 +110,7 @@ public class GameService {
     }
 
     private void setAllPlayers(long currentId, long avatarId, String name, BigDecimal initialAmount, MatchResponse matchResponse, Long numberOfPlayers) {
-        for (int i = 1; i < numberOfPlayers; i++) {
+        for (int i = 0; i < numberOfPlayers; i++) {
             if (getGame(currentId).getPlayers().get((long) i) == null) {
                 Player player = new Player();
                 player.setAvatarId(avatarId);
@@ -117,7 +118,7 @@ public class GameService {
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
                 matchResponse.setCurrentPlayerId(player);
-                
+
                 getGame(currentId).getPlayers().put((long) i, player);
                 break;
             }
