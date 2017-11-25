@@ -7,11 +7,10 @@ import java.util.Map;
 
 @Data
 public final class Game {
-    private final static Map<Long,Competition> set = new HashMap<>();
+    public final static Map<Long,Competition> competition = new HashMap<>();
     private static Game game = null;
 
     protected Game() {
-        set.put(1L, new Competition());
     }
 
     public static Game getGame() {
