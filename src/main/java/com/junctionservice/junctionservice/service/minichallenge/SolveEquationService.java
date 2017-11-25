@@ -19,9 +19,13 @@ public class SolveEquationService implements IMiniChallengeService {
     @Autowired
     private MathOperatorMapper mathOperatorMapper;
     private ArithmeticEquation arithmeticEquationGame;
+    private final int challengeId = 1;
+    private final String challengeName = "Solve Equation";
 
     public SolveEquationService() {
         this.arithmeticEquationGame = new ArithmeticEquation();
+        this.arithmeticEquationGame.setId(challengeId);
+        this.arithmeticEquationGame.setName(challengeName);
     }
 
     @Override

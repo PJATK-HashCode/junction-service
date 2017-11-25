@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class GameService {
@@ -26,13 +24,13 @@ public class GameService {
         this.miniChallengeService = miniChallengeService;
     }
 
-    public MatchResponse startNewGame(Competition competition, Game game){
+    public MatchResponse startNewGame(Competition competition, Game game) {
         MatchResponse matchResponse = new MatchResponse();
         competition.setCompetitionCode(String.valueOf(competitionId));
         competition.getAdmin().setId(0L);
-        competition.getPlayers().put(competition.getAdmin().getId(),competition.getAdmin());
+        competition.getPlayers().put(competition.getAdmin().getId(), competition.getAdmin());
 
-        game.competition.put(competitionId,competition);
+        game.competition.put(competitionId, competition);
         competitionId++;
         matchResponse.setCompetitionId(competitionId);
         matchResponse.setCurrentPlayerId(competition.getAdmin());
@@ -45,20 +43,19 @@ public class GameService {
         Long numberOfPlayers = (long) Game.competition.get(currentId).getNumberOfPlayers();
 
         for (int i = 1; i < numberOfPlayers; i++) {
-            if (Game.competition.get(currentId).getPlayers().get((long)i) == null)
-            {
+            if (Game.competition.get(currentId).getPlayers().get((long) i) == null) {
                 Player player = new Player();
                 player.setAvatarId(avatarId);
-                player.setId((long)i);
+                player.setId((long) i);
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
 
                 matchResponse.setCurrentPlayerId(player);
-                Game.competition.get(currentId).getPlayers().put((long) i,player);
+                Game.competition.get(currentId).getPlayers().put((long) i, player);
                 break;
             }
         }
-        while(Game.competition.get(currentId).getPlayers().size() != numberOfPlayers){
+        while (Game.competition.get(currentId).getPlayers().size() != numberOfPlayers) {
             Thread.sleep(30);
         }
         matchResponse.setCompetitionId(currentId);
@@ -77,10 +74,9 @@ public class GameService {
 
         listOfConfirmedPlayers.add(currentPlayer);
 
-        while(listOfConfirmedPlayers.size() != listOfPlayers.size()){
+        while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
             Thread.sleep(30);
         }
-
 
 
         matchResponse.setCompetitionId(currentId);
@@ -90,4 +86,6 @@ public class GameService {
 
         return matchResponse;
     }
+
+
 }
