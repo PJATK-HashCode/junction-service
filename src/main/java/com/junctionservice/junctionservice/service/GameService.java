@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class GameService {
@@ -98,7 +99,7 @@ public class GameService {
     }
 
 
-    public MatchResponse roundResult(Long currentId, Long playerId, Long timeInMs, String answer){
+    public MatchResponse roundResult(Long currentId, Long playerId, Long timeInMs, String answer) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
         Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
         if (currentPlayer.getInitialBillAmount() != null && getGame(currentId).getEqualSplit()){
@@ -111,19 +112,32 @@ public class GameService {
 
 
 
-        if(challenge.correctAnswer().equalsIgnoreCase(answer) && challenge.){
-            currentPlayer.setScore();
-        }
-
         if (challenge.correctAnswer().equalsIgnoreCase(answer)){
-            currentPlayer.setScore(currentPlayer.getScore()+1);
+            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.TRUE);
+            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
         }else {
-            currentPlayer.setScore(currentPlayer.getScore()-1);
+            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.FALSE);
+            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
+        }
+
+        List<Player> listOfPlayers = new ArrayList<>();
+        listOfPlayers.addAll(getGame(currentId).getPlayers().values());
+        List<Player> listOfConfirmedPlayers = new ArrayList<>();
+
+        listOfConfirmedPlayers.add(currentPlayer);
+
+        while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
+            Thread.sleep(30);
         }
 
 
+        listOfConfirmedPlayers = listOfConfirmedPlayers.stream().filter(person -> person.getCorrectAnswersPerRound().get(getGame(currentId).getCurrentRound()))
+                .sorted(Comparator.comparing(player -> player.getTimeToAnswerPerRound().get((long)getGame(currentId).getCurrentRound())))
+        .collect(Collectors.toList());
 
+        listOfConfirmedPlayers.get(0).setFinalPercentage(Long.valueOf(listOfConfirmedPlayers.get(0).getInitialPercentage() -(listOfPlayers.size()-1 * 2))).toString() );
 
+        return matchResponse;
     }
 
 
@@ -165,7 +179,11 @@ public class GameService {
         Boolean gameExist = getGame(gameId) != null;
         initialResponse.setDoExist(gameExist);
         if (gameExist) {
-            initialResponse.setDoInputInitialBill(getGame(gameId).getEqualSplit());
+            try {
+                initialResponse.setDoInputInitialBill(getGame(gameId).getEqualSplit());
+            }catch(Exception e){
+                initialResponse.setDoInputInitialBill(false);
+            }
         }
         return initialResponse;
     }
