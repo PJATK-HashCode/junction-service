@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class MiniChallengeService {
 
     @Autowired
-    private ArithmeticEquationService arithmeticEquationService;
+    private SolveEquationService solveEquationService;
 
 }
