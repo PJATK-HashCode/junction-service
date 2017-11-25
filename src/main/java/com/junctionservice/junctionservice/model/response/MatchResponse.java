@@ -15,10 +15,10 @@ public class MatchResponse {
     private List<Player> responsePlayers = new ArrayList<>();
     private Boolean isFinished;
     private Boolean runGame;
-    private Player currentPlayerId;
+    private Player currentPlayer;
     private String gameName;
     private String question;
     private Boolean isNextRound;
-    private List<String> possibleAnswers;
     private SolveEquatationState solveEquatationState = new SolveEquatationState();
+
 }
