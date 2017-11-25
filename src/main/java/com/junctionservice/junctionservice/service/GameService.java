@@ -26,6 +26,7 @@ public class GameService {
         game.competition.put(competitionId,competition);
         competitionId++;
         matchResponse.setCompetitionId(competitionId);
+        matchResponse.setCurrentPlayerId(competition.getAdmin().getId().toString());
         return matchResponse;
     }
 
