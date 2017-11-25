@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 @Data
 public class Player {
     private long id;
-    private BigDecimal billAmount;
+    private BigDecimal initialBillAmount;
+    private BigDecimal finalBillAmount;
+    private Double percentShare;
     private String name;
     private long avatarId;
 }
