@@ -4,15 +4,17 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class Competition {
-    private String gameCode;
+    private String competitionCode;
     private Player admin;
     private BigDecimal totalBill;
     private StateOfGame stateOfGame;
-    private boolean fixedShare;
-    private List<Player> players;
+    private Boolean fixedShare;
+    private Map<Long, Player> players;
+    private int numberOfPlayers;
 
 
 }

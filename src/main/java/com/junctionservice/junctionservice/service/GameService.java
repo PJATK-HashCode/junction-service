@@ -2,6 +2,7 @@ package com.junctionservice.junctionservice.service;
 
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
+import com.junctionservice.junctionservice.model.Player;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
 
-    private static long gameIdentifier = 0;
+    private static long competitionId = 0;
 
     public GameService() {
 
@@ -18,12 +19,25 @@ public class GameService {
 
     public MatchResponse startNewGame(Competition competition, Game game){
         MatchResponse matchResponse = new MatchResponse();
-        competition.getAdmin().setId();
+        competition.setCompetitionCode(String.valueOf(competitionId));
+        competition.getPlayers().put(competition.getAdmin().getId(),competition.getAdmin());
 
-        competition.setGameCode(String.valueOf(gameIdentifier));
+        game.competition.put(competitionId,competition);
+        competitionId++;
+        return matchResponse;
+    }
 
-        game.competition.put(gameIdentifier,competition);
-        gameIdentifier++;
+
+    public MatchResponse joinCompetition(long competitionId, long avatarId, String name){
+        MatchResponse matchResponse = new MatchResponse();
+        Competition competition = Game.competition.get(competitionId);
+
+        for (int i = 1; i < competition.getNumberOfPlayers()
+                ; i++) {
+            Player player = new Player();
+
+        }
+
         return matchResponse;
     }
 
