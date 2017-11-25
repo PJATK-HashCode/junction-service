@@ -176,7 +176,7 @@ public class GameService {
 
     public InitialResponse checkIfSameGameExistsAndDoInputInitialBill(long gameId) {
         InitialResponse initialResponse = new InitialResponse();
-        boolean gameExist = getGame(gameId) != null;
+        Boolean gameExist = getGame(gameId) != null;
         initialResponse.setDoExist(gameExist);
         if (gameExist) {
             try {
