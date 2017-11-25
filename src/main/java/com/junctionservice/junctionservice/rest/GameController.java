@@ -1,5 +1,6 @@
 package com.junctionservice.junctionservice.rest;
 
+import com.junctionservice.junctionservice.model.CheckIfExists;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
@@ -50,8 +51,8 @@ public class GameController {
 
 
     @RequestMapping(value = "/ask", method = RequestMethod.POST)
-    public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestBody Long gameId) {
-        InitialResponse initialResponse = gameService.checkIfSameGameExistsAndDoInputInitialBill(gameId);
-        return new ResponseEntity<InitialResponse>(initialResponse, HttpStatus.OK);
+    public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestBody CheckIfExists gameId) {
+        InitialResponse initialResponse = gameService.checkIfSameGameExistsAndDoInputInitialBill(gameId.getGameId());
+        return new ResponseEntity<>(initialResponse, HttpStatus.OK);
     }
 }
