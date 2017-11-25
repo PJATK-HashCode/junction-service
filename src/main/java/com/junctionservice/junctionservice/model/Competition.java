@@ -16,6 +16,4 @@ public class Competition {
     private Boolean fixedShare;
     private Map<Long, Player> players = new HashMap<>();
     private Integer numberOfPlayers;
-
-
 }

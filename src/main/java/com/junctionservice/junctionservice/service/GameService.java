@@ -20,11 +20,13 @@ public class GameService {
     public MatchResponse startNewGame(Competition competition, Game game){
         MatchResponse matchResponse = new MatchResponse();
         competition.setCompetitionCode(String.valueOf(competitionId));
+        competition.getAdmin().setId(0L);
         competition.getPlayers().put(competition.getAdmin().getId(),competition.getAdmin());
 
         game.competition.put(competitionId,competition);
         competitionId++;
         matchResponse.setCompetitionId(competitionId);
+        matchResponse.setCurrentPlayerId(competition.getAdmin().getId().toString());
         return matchResponse;
     }
 
@@ -50,7 +52,6 @@ public class GameService {
         while(Game.competition.get(competitionId).getPlayers().size() != numberOfPlayers){
             Thread.sleep(10);
         }
-
         matchResponse.setCompetitionId(competitionId);
         matchResponse.getResponsePlayers().addAll(Game.competition.get(competitionId).getPlayers().values());
         matchResponse.setRunGame(true);
