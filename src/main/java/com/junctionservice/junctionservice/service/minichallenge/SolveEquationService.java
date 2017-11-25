@@ -14,13 +14,13 @@ import java.util.Random;
 
 @Service
 @Data
-public class ArithmeticEquationService implements IMiniChallengeService {
+public class SolveEquationService implements IMiniChallengeService {
 
     @Autowired
     private MathOperatorMapper mathOperatorMapper;
     private ArithmeticEquation arithmeticEquationGame;
 
-    public ArithmeticEquationService() {
+    public SolveEquationService() {
         this.arithmeticEquationGame = new ArithmeticEquation();
     }
 

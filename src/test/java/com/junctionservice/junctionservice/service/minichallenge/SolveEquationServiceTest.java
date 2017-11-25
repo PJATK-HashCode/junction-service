@@ -9,16 +9,16 @@ import java.math.BigDecimal;
 
 import static org.junit.Assert.*;
 
-public class ArithmeticEquationServiceTest {
+public class SolveEquationServiceTest {
 
-    private ArithmeticEquationService arithmeticEquationService = new ArithmeticEquationService();
+    private SolveEquationService solveEquationService = new SolveEquationService();
     private MathOperatorMapper mathOperatorMapper = new MathOperatorMapper();
 
     @Before
     public void setChallenge() {
         ArithmeticEquation arithmeticEquation = new ArithmeticEquation();
-        arithmeticEquationService.setArithmeticEquationGame(arithmeticEquation);
-        arithmeticEquationService.setMathOperatorMapper(mathOperatorMapper);
+        solveEquationService.setArithmeticEquationGame(arithmeticEquation);
+        solveEquationService.setMathOperatorMapper(mathOperatorMapper);
     }
 
     @Test
