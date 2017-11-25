@@ -8,9 +8,9 @@ public class ArithmeticEquation implements IMiniChallenge {
 
     private int id;
     private String name;
-    private double firstNumber;
-    private double secondNumber;
-    private double result;
+    private long firstNumber;
+    private long secondNumber;
+    private long result;
     private MathOperator mathOperator;
 
     @Override

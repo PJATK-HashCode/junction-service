@@ -1,14 +1,20 @@
 package com.junctionservice.junctionservice.service.minichallenge;
 
 import com.junctionservice.junctionservice.model.minichallenge.arithmetic.ArithmeticEquation;
+import com.junctionservice.junctionservice.model.minichallenge.arithmetic.MathOperator;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
 @Service
+@Data
 public class ArithmeticEquationService implements IMiniChallengeService {
 
+    @Autowired
+    private MathOperatorMapper mathOperatorMapper;
     private ArithmeticEquation arithmeticEquationGame;
 
     public ArithmeticEquationService() {
@@ -39,4 +45,6 @@ public class ArithmeticEquationService implements IMiniChallengeService {
     public List<String> possibleAnswers() {
         return null;
     }
+
+
 }
