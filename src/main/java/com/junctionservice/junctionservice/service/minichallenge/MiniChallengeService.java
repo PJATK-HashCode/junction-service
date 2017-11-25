@@ -1,5 +1,6 @@
 package com.junctionservice.junctionservice.service.minichallenge;
 
+import com.junctionservice.junctionservice.service.minichallenge.colourpicker.ColourPickerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,4 +25,6 @@ public class MiniChallengeService {
     }
 
 
+    @Autowired
+    private ColourPickerService colourPickerService;
 }
