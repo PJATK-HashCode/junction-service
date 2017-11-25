@@ -15,8 +15,6 @@ public class GameService {
     private static long competitionId = 0;
 
     public GameService() {
-
-
     }
 
     public MatchResponse startNewGame(Competition competition, Game game){
@@ -34,10 +32,9 @@ public class GameService {
         MatchResponse matchResponse = new MatchResponse();
         Competition competition = Game.competition.get(competitionId);
 
-        Long numberOfPlayers = new Long(competition.getNumberOfPlayers());
+        Long numberOfPlayers = (long) competition.getNumberOfPlayers();
 
-        for (int i = 1; i < numberOfPlayers
-                ; i++) {
+        for (int i = 1; i < numberOfPlayers; i++) {
             if (competition.getPlayers().get((long)i) == null)
             {
                 Player player = new Player();
@@ -46,14 +43,13 @@ public class GameService {
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
 
-
-
+                matchResponse.setCurrentPlayerId(String.valueOf(i));
                 competition.getPlayers().put((long) i,player);
                 break;
             }
         }
 
-        while(competition.getPlayers().get(numberOfPlayers) != null){
+        while(Game.competition.get(competitionId).getPlayers().get(numberOfPlayers) != null){
             Thread.sleep(10);
         }
 

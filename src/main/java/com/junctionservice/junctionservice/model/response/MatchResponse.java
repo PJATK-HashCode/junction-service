@@ -13,5 +13,6 @@ public class MatchResponse {
     private List<Player> responsePlayers;
     private Boolean isFinished;
     private Boolean runGame;
+    private String currentPlayerId;
 
 }
