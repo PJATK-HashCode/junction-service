@@ -21,7 +21,7 @@ public class ColourPickerService implements IMiniChallengeService {
     }
 
     @Override
-    public int challengeId() {
+    public Integer challengeId() {
         return colourPickerGame.id();
     }
 
@@ -37,18 +37,19 @@ public class ColourPickerService implements IMiniChallengeService {
 
     @Override
     public String question() {
-        Map<String, String> colourStringMap = new HashMap<>();
-        Colour randomColour = getRandomColour();
-        Colour anotherRandomColour = getRandomColour();
-
-        while(randomColour==anotherRandomColour){
-            anotherRandomColour = getRandomColour();
-        }
-
-        colourStringMap.put(randomColour.toString(), anotherRandomColour.name());
-
-        colourPickerGame.setResult(randomColour.name());
-        return String.valueOf(colourStringMap);
+//        Map<String, String> colourStringMap = new HashMap<>();
+//        Colour randomColour = getRandomColour();
+//        Colour anotherRandomColour = getRandomColour();
+//
+//        while(randomColour==anotherRandomColour){
+//            anotherRandomColour = getRandomColour();
+//        }
+//
+//        colourStringMap.put(randomColour.toString(), anotherRandomColour.name());
+//
+//        colourPickerGame.setResult(randomColour.name());
+//        return String.valueOf(colourStringMap);
+        return null;
     }
 
 
@@ -67,6 +68,22 @@ public class ColourPickerService implements IMiniChallengeService {
         }
         Collections.shuffle(answers);
         return answers;
+    }
+
+    @Override
+    public Map<String, String> multipleParameterQuestion() {
+        Map<String, String> colourStringMap = new HashMap<>();
+        Colour randomColour = getRandomColour();
+        Colour anotherRandomColour = getRandomColour();
+
+        while(randomColour==anotherRandomColour){
+            anotherRandomColour = getRandomColour();
+        }
+
+        colourStringMap.put(randomColour.toString(), anotherRandomColour.name());
+
+        colourPickerGame.setResult(randomColour.name());
+        return colourStringMap;
     }
 
     private Colour getRandomColour() {

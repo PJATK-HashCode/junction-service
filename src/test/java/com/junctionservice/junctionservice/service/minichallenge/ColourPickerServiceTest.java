@@ -22,27 +22,9 @@ public class ColourPickerServiceTest {
    }
 
    @Test
-   public void dsdsd(){
-       System.out.println(colourPickerService.question());
-       System.out.println(colourPickerService.getColourPickerGame().getResult());
-   }
-
-   @Test
-   public void checkIfCorrectAnswerIncluded(){
-      assertTrue(colourPickerService.possibleAnswers()
-              .contains(colourPickerService.correctAnswer()));
-       System.out.println(colourPickerService.correctAnswer());
-       System.out.println(colourPickerService.possibleAnswers());
-       System.out.println(colourPickerService.getColourPickerGame().getResult());
-   }
-
-   @Test
     public void checkIfCorrectAnswerIsAccepted(){
-       colourPickerService.question();
-       colourPickerService.possibleAnswers();
-       System.out.println(colourPickerService.question());
+       System.out.println(colourPickerService.multipleParameterQuestion());
        System.out.println(colourPickerService.possibleAnswers());
-       System.out.println(colourPickerService.correctAnswer());
        System.out.println(colourPickerService.getColourPickerGame().getResult());
    }
 }
