@@ -2,6 +2,7 @@ package com.junctionservice.junctionservice.rest;
 
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
+import com.junctionservice.junctionservice.model.Player;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import com.junctionservice.junctionservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +32,18 @@ public class GameController {
         return new ResponseEntity(matchResponse, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{competitionId}/join", method = RequestMethod.GET)
+    @RequestMapping(value = "/{competitionId}/join", method = RequestMethod.POST)
     public ResponseEntity<MatchResponse> joinCompetition(@PathVariable("competitionId") Long competitionId,
-                                                         @RequestParam("nickName") String name,
-                                                         @RequestParam("avatarId") Long avatarId,
-                                                         @RequestParam("initialAmount")BigDecimal initialAmount) throws InterruptedException {
-        MatchResponse matchResponse = gameService.joinCompetition(competitionId,avatarId,name,initialAmount);
+                                                         @RequestBody Player player) throws InterruptedException {
+        MatchResponse matchResponse = gameService.joinCompetition(competitionId,player.getName(),player.getInitialBillAmount());
 
         return new ResponseEntity<>(matchResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{competitionId}/selectMinigame", method = RequestMethod.GET)
     public ResponseEntity<MatchResponse> startMinigame(@PathVariable("competitionId") Long competitionId,
-                                                       @RequestParam("playerId") Long playerId) throws InterruptedException {
-        MatchResponse matchResponse = gameService.startMinigames(competitionId,playerId);
+                                                       @RequestBody Player player) throws InterruptedException {
+        MatchResponse matchResponse = gameService.startMinigames(competitionId,player.getId());
         return new ResponseEntity<MatchResponse>(matchResponse,HttpStatus.OK);
     }
 }

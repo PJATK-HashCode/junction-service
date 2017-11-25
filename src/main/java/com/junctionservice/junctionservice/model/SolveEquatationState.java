@@ -9,4 +9,5 @@ import java.util.Map;
 public class SolveEquatationState {
     private String question;
     private List<String> possibleAnswerList;
+    private String answer;
 }
