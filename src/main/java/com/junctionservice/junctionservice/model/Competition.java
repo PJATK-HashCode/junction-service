@@ -11,7 +11,7 @@ public class Competition {
     private String competitionCode;
     private Player admin;
     private BigDecimal totalBill;
-    private StateOfGame stateOfGame;
+    private SolveEquatationState solveEquatationState;
     private Boolean fixedShare;
     private Map<Long, Player> players = new HashMap<>();
     private Integer numberOfPlayers;

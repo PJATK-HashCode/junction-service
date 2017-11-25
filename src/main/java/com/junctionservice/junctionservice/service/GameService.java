@@ -3,7 +3,6 @@ package com.junctionservice.junctionservice.service;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
-import com.junctionservice.junctionservice.model.minichallenge.IMiniChallenge;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import com.junctionservice.junctionservice.service.minichallenge.IMiniChallengeService;
 import com.junctionservice.junctionservice.service.minichallenge.MiniChallengeService;
@@ -81,7 +80,14 @@ public class GameService {
         matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
         matchResponse.setCurrentPlayerId(currentPlayer);
         matchResponse.setGameName(miniChallenge.challengeName());
+        if (miniChallenge.challengeName().equalsIgnoreCase("Solve Equation")) {
+            matchResponse.getSolveEquatationState().setQuestion(miniChallenge.question());
+            matchResponse.getSolveEquatationState().setPossibleAnswerList(miniChallenge.possibleAnswers());
+        }
+        if (miniChallenge.challengeName().equalsIgnoreCase("colourpicker"))
+        {
 
+        }
         if (getGame(currentId).getNumberOfRounds() >=  getGame(currentId).getCurrentRound()){
             matchResponse.setIsNextRound(false);
         }else {

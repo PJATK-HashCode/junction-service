@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -29,7 +30,7 @@ public class SolveEquationService implements IMiniChallengeService {
     }
 
     @Override
-    public int challengeId() {
+    public Integer challengeId() {
         return arithmeticEquationGame.id();
     }
 
@@ -69,6 +70,11 @@ public class SolveEquationService implements IMiniChallengeService {
 
         answers.add(arithmeticEquationGame.getResult().toString());
         return answers;
+    }
+
+    @Override
+    public Map<String, String> multipleParameterQuestion() {
+        return null;
     }
 
 
