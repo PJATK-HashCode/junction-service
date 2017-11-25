@@ -3,6 +3,7 @@ package com.junctionservice.junctionservice.rest;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.model.response.InitialResponse;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import com.junctionservice.junctionservice.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,8 @@ public class GameController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<MatchResponse> startGame(@RequestBody Competition competition){
-        MatchResponse matchResponse = gameService.startNewGame(competition,game);
+    public ResponseEntity<MatchResponse> startGame(@RequestBody Competition competition) {
+        MatchResponse matchResponse = gameService.startNewGame(competition, game);
         return new ResponseEntity(matchResponse, HttpStatus.OK);
     }
 
@@ -36,14 +37,21 @@ public class GameController {
     public ResponseEntity<MatchResponse> joinCompetition(@PathVariable("competitionId") Long competitionId,
                                                          @RequestBody Player player) throws InterruptedException {
         MatchResponse matchResponse = gameService.joinCompetition(competitionId,player.getName(),player.getInitialBillAmount());
-
         return new ResponseEntity<>(matchResponse, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{competitionId}/selectMinigame", method = RequestMethod.GET)
     public ResponseEntity<MatchResponse> startMinigame(@PathVariable("competitionId") Long competitionId,
                                                        @RequestBody Player player) throws InterruptedException {
-        MatchResponse matchResponse = gameService.startMinigames(competitionId,player.getId());
-        return new ResponseEntity<MatchResponse>(matchResponse,HttpStatus.OK);
+        MatchResponse matchResponse = gameService.startMinigames(competitionId, player.getId());
+        return new ResponseEntity<MatchResponse>(matchResponse, HttpStatus.OK);
+    }
+
+
+
+    @RequestMapping(value = "/ask", method = RequestMethod.POST)
+    public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestParam("gameId") Long gameId) {
+        InitialResponse initialResponse = gameService.checkIfSameGameExistsAndDoInputInitialBill(gameId);
+        return new ResponseEntity<InitialResponse>(initialResponse, HttpStatus.OK);
     }
 }

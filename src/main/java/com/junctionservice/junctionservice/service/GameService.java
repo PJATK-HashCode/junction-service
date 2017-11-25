@@ -3,6 +3,7 @@ package com.junctionservice.junctionservice.service;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.model.response.InitialResponse;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import com.junctionservice.junctionservice.service.minichallenge.IMiniChallengeService;
 import com.junctionservice.junctionservice.service.minichallenge.MiniChallengeService;
@@ -53,7 +54,6 @@ public class GameService {
     }
 
 
-
     public MatchResponse startMinigames(long currentId, long playerId) throws InterruptedException {
         MatchResponse matchResponse = new MatchResponse();
         Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
@@ -70,7 +70,8 @@ public class GameService {
 
         IMiniChallengeService miniChallenge = miniChallengeService.selectRandomChallenge();
 
-        if (getGame(currentId).getNumberOfRounds() == null){
+        if (getGame(currentId).getNumberOfRounds() == null) {
+
             getGame(currentId).setNumberOfRounds(1);
         }
 
@@ -83,13 +84,12 @@ public class GameService {
             matchResponse.getSolveEquatationState().setQuestion(miniChallenge.question());
             matchResponse.getSolveEquatationState().setPossibleAnswerList(miniChallenge.possibleAnswers());
         }
-        if (miniChallenge.challengeName().equalsIgnoreCase("colourpicker"))
-        {
+        if (miniChallenge.challengeName().equalsIgnoreCase("colourpicker")) {
 
         }
-        if (getGame(currentId).getNumberOfRounds() >=  getGame(currentId).getCurrentRound()){
+        if (getGame(currentId).getNumberOfRounds() >= getGame(currentId).getCurrentRound()) {
             matchResponse.setIsNextRound(false);
-        }else {
+        } else {
             matchResponse.setIsNextRound(true);
         }
 
@@ -140,7 +140,6 @@ public class GameService {
 
 
 
-
     private Competition getGame(long currentId) {
         return Game.competition.get(currentId);
     }
@@ -160,4 +159,15 @@ public class GameService {
             }
         }
     }
+
+    public InitialResponse checkIfSameGameExistsAndDoInputInitialBill(long gameId) {
+        InitialResponse initialResponse = new InitialResponse();
+        boolean gameExist = getGame(gameId) != null;
+        initialResponse.setDoExist(gameExist);
+        if (gameExist) {
+            initialResponse.setDoInputInitialBill(getGame(gameId).getEqualSplit());
+        }
+        return initialResponse;
+    }
+
 }
