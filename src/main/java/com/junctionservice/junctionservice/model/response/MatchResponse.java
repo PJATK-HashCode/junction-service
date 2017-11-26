@@ -17,8 +17,9 @@ public class MatchResponse {
     private Boolean runGame;
     private Player currentPlayer;
     private String gameName;
-    private String question;
     private Boolean isNextRound;
-    private SolveEquatationState solveEquatationState = new SolveEquatationState();
+    private String question;
+    private List<String> possibleAnswerList;
+    private String answer;
 
 }

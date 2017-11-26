@@ -29,6 +29,11 @@ public class GameService {
         MatchResponse matchResponse = new MatchResponse();
         competition.setCompetitionCode(String.valueOf(competitionId));
         competition.getPlayer().setId(0L);
+        if (competition.getEqualSplit() == null || !competition.getEqualSplit()){
+            competition.setEqualSplit(false);
+        }else {
+            competition.setEqualSplit(true);
+        }
 //        competition.getPlayers().put(competition.getPlayer().getId(), competition.getPlayer());
 
         game.competition.put(competitionId, competition);
@@ -45,8 +50,18 @@ public class GameService {
 
         setAllPlayers(currentId, name, initialAmount, matchResponse, numberOfPlayers);
 
+        getGame(currentId).setCurrentRound(1);
         while (getGame(currentId).getPlayers().size() != numberOfPlayers) {
             Thread.sleep(30);
+        }
+        if (getGame(currentId).getNumberOfRounds() == null) {
+
+            getGame(currentId).setNumberOfRounds(1);
+        }
+        if (getGame(currentId).getNumberOfRounds() <= getGame(currentId).getCurrentRound()) {
+            matchResponse.setIsNextRound(false);
+        } else {
+            matchResponse.setIsNextRound(true);
         }
         matchResponse.setCompetitionId(currentId);
         matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
@@ -61,29 +76,39 @@ public class GameService {
 
         List<Player> listOfPlayers = new ArrayList<>();
         listOfPlayers.addAll(getGame(currentId).getPlayers().values());
-        List<Player> listOfConfirmedPlayers = new ArrayList<>();
 
-        listOfConfirmedPlayers.add(currentPlayer);
 
-        while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
+        getGame(currentId).getListOfConfirmedPlayers().add(currentPlayer);
+
+        while (getGame(currentId).getListOfConfirmedPlayers().size() != getGame(currentId).getPlayers().size()) {
             Thread.sleep(30);
         }
 
+
         IMiniChallengeService miniChallenge = miniChallengeService.selectRandomChallenge();
 
-        if (getGame(currentId).getNumberOfRounds() == null) {
 
-            getGame(currentId).setNumberOfRounds(1);
-        }
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                try{Thread.sleep(500);}catch(Exception e){}
+                getGame(currentId).getListOfConfirmedPlayers().clear();
+
+            }
+        }).start();
 
 
         matchResponse.setCompetitionId(currentId);
         matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values());
         matchResponse.setCurrentPlayer(currentPlayer);
-        matchResponse.setGameName(miniChallenge.challengeName());
+        matchResponse.setGameName("Solve Equation");
         if (miniChallenge.challengeName().equalsIgnoreCase("Solve Equation")) {
-            matchResponse.getSolveEquatationState().setQuestion(miniChallenge.question());
-            matchResponse.getSolveEquatationState().setPossibleAnswerList(miniChallenge.possibleAnswers());
+            matchResponse.setQuestion(miniChallenge.question());
+            matchResponse.setPossibleAnswerList(miniChallenge.possibleAnswers());
         }
         if (miniChallenge.challengeName().equalsIgnoreCase("colourpicker")) {
 
@@ -99,46 +124,42 @@ public class GameService {
     }
 
 
-    public MatchResponse roundResult(Long currentId, Long playerId, Long timeInMs, String answer) throws InterruptedException {
-        MatchResponse matchResponse = new MatchResponse();
-        Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
-        if (currentPlayer.getInitialBillAmount() != null && getGame(currentId).getEqualSplit()){
-            currentPlayer.setInitialPercentage((String.valueOf(getGame(currentId).getTotalBill()/currentPlayer.getInitialBillAmount()*100)));
-        }else {
-            currentPlayer.setInitialPercentage((String.valueOf(getGame(currentId).getTotalBill()/getGame(currentId).getNumberOfPlayers())));
-        }
-
-        IMiniChallengeService challenge= getGame(currentId).getMiniChallenge();
-
-
-
-        if (challenge.correctAnswer().equalsIgnoreCase(answer)){
-            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.TRUE);
-            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
-        }else {
-            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.FALSE);
-            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
-        }
-
-        List<Player> listOfPlayers = new ArrayList<>();
-        listOfPlayers.addAll(getGame(currentId).getPlayers().values());
-        List<Player> listOfConfirmedPlayers = new ArrayList<>();
-
-        listOfConfirmedPlayers.add(currentPlayer);
-
-        while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
-            Thread.sleep(30);
-        }
-
-
-        listOfConfirmedPlayers = listOfConfirmedPlayers.stream().filter(person -> person.getCorrectAnswersPerRound().get(getGame(currentId).getCurrentRound()))
-                .sorted(Comparator.comparing(player -> player.getTimeToAnswerPerRound().get((long)getGame(currentId).getCurrentRound())))
-        .collect(Collectors.toList());
-
-        listOfConfirmedPlayers.get(0).setFinalPercentage(Long.valueOf(listOfConfirmedPlayers.get(0).getInitialPercentage() -(listOfPlayers.size()-1 * 2))).toString() );
-
-        return matchResponse;
-    }
+//    public MatchResponse roundResult(Long currentId, Long playerId, Long timeInMs, String answer) throws InterruptedException {
+//        MatchResponse matchResponse = new MatchResponse();
+//        Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
+//
+//
+//        IMiniChallengeService challenge= getGame(currentId).getMiniChallenge();
+//
+//
+//
+//        if (challenge.correctAnswer().equalsIgnoreCase(answer)){
+//            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.TRUE);
+//            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
+//        }else {
+//            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.FALSE);
+//            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
+//        }
+//
+//        List<Player> listOfPlayers = new ArrayList<>();
+//        listOfPlayers.addAll(getGame(currentId).getPlayers().values());
+//        List<Player> listOfConfirmedPlayers = new ArrayList<>();
+//
+//        listOfConfirmedPlayers.add(currentPlayer);
+//
+//        while (listOfConfirmedPlayers.size() != listOfPlayers.size()) {
+//            Thread.sleep(30);
+//        }
+//
+//
+//        listOfConfirmedPlayers = listOfConfirmedPlayers.stream().filter(person -> person.getCorrectAnswersPerRound().get(getGame(currentId).getCurrentRound()))
+//                .sorted(Comparator.comparing(player -> player.getTimeToAnswerPerRound().get((long)getGame(currentId).getCurrentRound())))
+//        .collect(Collectors.toList());
+//
+////        listOfConfirmedPlayers.get(0).setFinalPercentage(Long.valueOf(listOfConfirmedPlayers.get(0).getInitialPercentage() -(listOfPlayers.size()-1 * 2))).toString() );
+//
+//        return matchResponse;
+//    }
 
 
 
@@ -167,6 +188,11 @@ public class GameService {
                 player.setName(name);
                 player.setInitialBillAmount(initialAmount);
                 matchResponse.setCurrentPlayer(player);
+                if (player.getInitialBillAmount() != null && getGame(currentId).getEqualSplit()){
+                    player.setInitialPercentage((String.valueOf(getGame(currentId).getTotalBill()/player.getInitialBillAmount()*100))+"%");
+                }else {
+                    player.setInitialPercentage((String.valueOf(getGame(currentId).getTotalBill()/getGame(currentId).getNumberOfPlayers())+"%"));
+                }
 
                 getGame(currentId).getPlayers().put((long) i, player);
                 break;
@@ -188,4 +214,59 @@ public class GameService {
         return initialResponse;
     }
 
+    public MatchResponse roundResult(Long currentId, Long playerId, Long timeInMs, String answer) throws InterruptedException {
+        MatchResponse matchResponse = new MatchResponse();
+        Player currentPlayer = getGame(currentId).getPlayers().get(playerId);
+        if (currentPlayer.getInitialBillAmount() != null && getGame(currentId).getEqualSplit() != null  && getGame(currentId).getEqualSplit()){
+            currentPlayer.setInitialPercentage((String.valueOf(currentPlayer.getInitialBillAmount()/getGame(currentId).getTotalBill()*100)));
+        }else {
+            currentPlayer.setInitialPercentage((String.valueOf(getGame(currentId).getTotalBill()/getGame(currentId).getNumberOfPlayers())));
+        }
+
+        IMiniChallengeService challenge= getGame(currentId).getMiniChallenge();
+
+
+
+
+        if (challenge.correctAnswer().equalsIgnoreCase(answer)){
+            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.TRUE);
+            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),timeInMs);
+            currentPlayer.setScore(currentPlayer.getScore()+1);
+        }else {
+            currentPlayer.getCorrectAnswersPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()),Boolean.FALSE);
+            currentPlayer.getTimeToAnswerPerRound().put(Long.valueOf(getGame(currentId).getCurrentRound()), timeInMs);
+            currentPlayer.setScore(currentPlayer.getScore()-1);
+        }
+
+        List<Player> listOfPlayers = new ArrayList<>();
+        listOfPlayers.addAll(getGame(currentId).getPlayers().values());
+
+        getGame(currentId).getListOfConfirmedPlayers().add(currentPlayer);
+
+        while (getGame(currentId).getListOfConfirmedPlayers().size() != getGame(currentId).getPlayers().size()) {
+            Thread.sleep(30);
+        }
+
+
+        List<Player> playersList = new ArrayList<>();
+        playersList.addAll( getGame(currentId).getPlayers().values());
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+
+                try{Thread.sleep(500);}catch(Exception e){}
+                getGame(currentId).getListOfConfirmedPlayers().clear();
+
+            }
+        }).start();
+
+        matchResponse.setCompetitionId(currentId);
+        matchResponse.getResponsePlayers().addAll(getGame(currentId).getPlayers().values().stream().sorted(Comparator.comparing(Player::getScore)).collect(Collectors.toList()));
+        matchResponse.setIsNextRound(Boolean.FALSE);
+        return matchResponse;
+    }
 }
