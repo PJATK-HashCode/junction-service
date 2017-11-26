@@ -4,6 +4,7 @@ import com.junctionservice.junctionservice.model.CheckIfExists;
 import com.junctionservice.junctionservice.model.Competition;
 import com.junctionservice.junctionservice.model.Game;
 import com.junctionservice.junctionservice.model.Player;
+import com.junctionservice.junctionservice.model.minichallenge.GameResult;
 import com.junctionservice.junctionservice.model.response.InitialResponse;
 import com.junctionservice.junctionservice.model.response.MatchResponse;
 import com.junctionservice.junctionservice.service.GameService;
@@ -54,5 +55,13 @@ public class GameController {
     public ResponseEntity<InitialResponse> checkIfSameGameExistsAndDoInputInitialBill(@RequestBody CheckIfExists gameId) {
         InitialResponse initialResponse = gameService.checkIfSameGameExistsAndDoInputInitialBill(gameId.getGameId());
         return new ResponseEntity<>(initialResponse, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{competitionId}/result", method = RequestMethod.POST)
+    public ResponseEntity<MatchResponse> result(@PathVariable("competitionId") Long competitionId,
+                                                @RequestBody GameResult gameResult) throws InterruptedException {
+        MatchResponse matchResponse = gameService.roundResult(competitionId,gameResult.getUserId(),gameResult.getTime(),gameResult.getResponse().toString());
+
+        return new ResponseEntity<>(matchResponse,HttpStatus.OK);
     }
 }
