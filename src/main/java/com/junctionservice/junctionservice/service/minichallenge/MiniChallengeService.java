@@ -21,7 +21,8 @@ public class MiniChallengeService {
 
     public IMiniChallengeService selectRandomChallenge() {
         Random randomize = new Random();
-        return iMiniChallenges.get(randomize.nextInt(iMiniChallenges.size()));
+//        return iMiniChallenges.get(randomize.nextInt(iMiniChallenges.size()));
+        return solveEquationService;
     }
 
 

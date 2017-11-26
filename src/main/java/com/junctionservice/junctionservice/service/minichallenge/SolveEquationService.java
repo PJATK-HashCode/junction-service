@@ -66,7 +66,6 @@ public class SolveEquationService implements IMiniChallengeService {
         for (int i = 0; i < 3; i++) {
             BigDecimal incorrectNumber = BigDecimal.valueOf(random.nextInt(10000));
             answers.add(incorrectNumber.toString());
-            i++;
         }
 
         answers.add(arithmeticEquationGame.getResult().toString());
